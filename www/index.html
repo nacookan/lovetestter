@@ -1,0 +1,593 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta http-equiv="Content-Script-Type" content="text/javascript" />
+		<meta http-equiv="Content-Style-Type" content="text/css" />
+		<script src="http://www.google.com/jsapi"></script>
+		<script>google.load("jquery", "1");</script>
+		<style type="text/css">
+			body{
+				font-family: sans-serif;
+				margin: 0;
+				padding: 1em;
+				background: #deeff6;
+				font-size: 100%;
+				word-break: break-all;
+				line-height: 1.1em;
+			}
+			div#header{
+				margin: 0 0 0.5em 0;
+				padding: 0.8em 1em;
+				background: #ffffff;
+				-webkit-border-radius: 10px;
+				-moz-border-radius: 10px;
+				border-radius: 10px;
+				-webkit-box-shadow: 0px 1px 3px #a0a0a0;
+				-moz-box-shadow: 0px 1px 3px #a0a0a0;
+				box-shadow: 0px 1px 3px #a0a0a0;
+			}
+			img{
+				vertical-align: middle;
+			}
+			h1{
+				margin: 0;
+				padding: 0;
+				font-weight: normal;
+				font-size: 200%;
+				line-height: 110%;
+			}
+			div#header p{
+				margin: 0;
+				padding: 0;
+				font-size: 90%;
+				color: #808080;
+			}
+			h2{
+				font-weight: normal;
+				font-size: 120%;
+				line-height: 150%;
+				margin: 0.5em 0 0 0;
+				padding: 0;
+			}
+			h2 img.icon{
+				margin: 0 8px 0 0;
+				padding: 0;
+			}
+			div#stage{
+				margin: 0;
+				padding: 0.5em 1em;
+				background: #ffffff;
+				-webkit-border-radius: 10px;
+				-moz-border-radius: 10px;
+				border-radius: 10px;
+				-webkit-box-shadow: 0px 1px 3px #a0a0a0;
+				-moz-box-shadow: 0px 1px 3px #a0a0a0;
+				box-shadow: 0px 1px 3px #a0a0a0;
+			}
+			p#start_message{
+				font-size: 90%;
+				margin: 1em 0 0 0;
+				padding: 0;
+				color: #505050;
+				text-align: center;
+			}
+			p#start_link{
+				text-align: center;
+				margin: 0;
+				padding: 3em 0 4em 0;
+			}
+			p#start_link a{
+				color: #ffffff;
+				font-weight: bold;
+				text-decoration: none;
+				text-align: center;
+				margin: 0;
+				padding: 2em 3em;
+				background: #5b92b1;
+				border: solid 1px #5284a5;
+				-webkit-border-radius: 4px;
+				-moz-border-radius: 4px;
+				border-radius: 4px;
+				-webkit-box-shadow: 0px 1px 3px #a0a0a0;
+				-moz-box-shadow: 0px 1px 3px #a0a0a0;
+				box-shadow: 0px 1px 3px #a0a0a0;
+			}
+			p#loading{
+				color: #505050;
+				margin: 0;
+				padding: 3em 0;
+				text-align: center;
+			}
+			table{
+				margin: 0 0 1em 0;
+				padding: 0;
+				border-collapse: collapse;
+				border: solid 1px #d0d0d0;
+				-webkit-box-shadow: 0px 1px 3px #a0a0a0;
+				-moz-box-shadow: 0px 1px 3px #a0a0a0;
+				box-shadow: 0px 1px 3px #a0a0a0;
+			}
+			tr.even td{
+				background: #ffffff;
+			}
+			tr.odd td{
+				background: #f2f7fb;
+			}
+			th{
+				white-space: nowrap;
+				font-size: 70%;
+				color: #505050;
+				background: #f2f7fb;
+				border: solid 1px #e0e0e0;
+			}
+			td{
+				padding: 0.5em 0.8em;
+				border: solid 1px #e0e0e0;
+			}
+			td.profile_image{
+				border-right: none;
+				text-align: right;
+				padding-right: 0.2em;
+			}
+			td.profile_image img.profile_image{
+				width: 50px;
+				height: 50px;
+				-webkit-border-radius: 5px;
+				/*-moz-border-radius: 5px; doesn't work */
+				border-radius: 5px;
+				-webkit-box-shadow: 0px 1px 3px #a0a0a0;
+				-moz-box-shadow: 0px 1px 3px #a0a0a0;
+				box-shadow: 0px 1px 3px #a0a0a0;
+			}
+			td.profile_image img.protected{
+				width: 12px;
+				height: 12px;
+				margin: 2px;
+			}
+			td.profile_image img.verified{
+				width: 12px;
+				height: 12px;
+				margin: 2px;
+			}
+			td.name{
+				border-left: none;
+				padding-left: 0;
+				font-weight: bold;
+				color: #505050;
+				font-size: 90%
+			}
+			td.name span.screen_name{
+				white-space: nowrap;
+				display: block;
+				color: #a0a0a0;
+				font-size: 80%;
+			}
+			td.name span.screen_name a{
+				color: #a0a0a0;
+			}
+			span.location{
+				margin: 0.2em 0 0 0;
+				display: block;
+				line-height: 1em;
+				font-weight: normal;
+				color: #a0a0a0;
+				font-size: 75%;
+			}
+			td.tweets_count{
+				white-space: nowrap;
+				text-align: right;
+				color: #505050;
+				font-size: 80%;
+			}
+			td.friends_count{
+				white-space: nowrap;
+				text-align: right;
+				color: #505050;
+				font-size: 80%;
+			}
+			td.followers_count{
+				white-space: nowrap;
+				text-align: right;
+				color: #505050;
+				font-size: 80%;
+			}
+			td.profile{
+				vertical-align: top;
+				color: #505050;
+				font-size: 75%
+			}
+			td.profile span.url{
+				display: block;
+				color: #a0a0a0;
+				font-size: 90%
+			}
+			td.profile span.url a{
+				color: #a0a0a0;
+			}
+			td.profile span.date{
+				display: block;
+				color: #a0a0a0;
+				font-size: 90%
+			}
+			td.tweet{
+				vertical-align: top;
+				color: #505050;
+				font-size: 75%;
+			}
+			td.tweet div.list{
+				max-height: 25em;
+				overflow: auto;
+			}
+			td.tweet span.date{
+				display: block;
+				color: #a0a0a0;
+				font-size: 90%
+			}
+			td.tweet span.date a{
+				color: #a0a0a0;
+			}
+			td.tweet a.timelinelink{
+				color: #a0a0ff;
+			}
+			td.link{
+				white-space: nowrap;
+				font-size: 70%;
+			}
+			td.link a{
+				color: #ffffff;
+				text-decoration: none;
+				display: block;
+				text-align: center;
+				margin: 0;
+				padding: 0.2em;
+				background: #5b92b1;
+				border: solid 1px #5284a5;
+				-webkit-border-radius: 4px;
+				-moz-border-radius: 4px;
+				border-radius: 4px;
+				-webkit-box-shadow: 0px 1px 3px #a0a0a0;
+				-moz-box-shadow: 0px 1px 3px #a0a0a0;
+				box-shadow: 0px 1px 3px #a0a0a0;
+			}
+			span.state{
+				display: block;
+				text-align: center;
+				color: #505050;
+			}
+			div#amazon{
+				text-align: center;
+				margin: 0.5em 0 0 0;
+				padding: 0.5em 1em;
+				background: #ffffff;
+				-webkit-border-radius: 10px;
+				-moz-border-radius: 10px;
+				border-radius: 10px;
+				-webkit-box-shadow: 0px 1px 3px #a0a0a0;
+				-moz-box-shadow: 0px 1px 3px #a0a0a0;
+				box-shadow: 0px 1px 3px #a0a0a0;
+			}
+			div#amazon div{
+				margin: 0 auto;
+			}
+			address{
+				font-style: normal;
+				color: #505050;
+				text-align: center;
+				margin: 0.5em 0 0 0;
+				padding: 0.5em 1em;
+				background: #ffffff;
+				-webkit-border-radius: 10px;
+				-moz-border-radius: 10px;
+				border-radius: 10px;
+				-webkit-box-shadow: 0px 1px 3px #a0a0a0;
+				-moz-box-shadow: 0px 1px 3px #a0a0a0;
+				box-shadow: 0px 1px 3px #a0a0a0;
+			}
+			address a { color: #505050; }
+		</style>
+		<script type="text/javascript">
+			$(function(){
+				proc_profile();
+			});
+
+			function proc_profile(){
+				$('#message').text('プロフィール読み込み中');
+				$.get(
+					'profile.cgi',
+					null,
+					function(data, status){
+						if(data.logged_in){
+							var limit = 5000;
+							if(
+								limit <= data.profile.friends_count ||
+								limit <= data.profile.followers_count
+							){
+								var message = 'フォローまたはフォロワーが ' + limit.toString() + ' を超えるため、ご利用いただけません。ごめんなさい＞＜';
+								alert(message);
+								$('#stage').text(message);
+								return;
+							}
+							proc_relation(data.profile.id);
+						}else{
+							$('#stage').html([
+								'<p id="start_message">スタートボタンを押して、つぎの画面でアクセスを許可してください。</p>',
+								'<p id="start_link"><a href="oauth_start.cgi">スタート</a></p>'
+							].join(''));
+						}
+					},
+					'json'
+				);
+			}
+
+			function proc_relation(id){
+				$('#message').text('フォロー/フォロワー分析中');
+				$.get(
+					'relations.cgi',
+					{ id: id },
+					function(data, status){
+						var friends = {};
+						$.each(data.friends, function(){
+							friends[this] = 1;
+						});
+						var followers = {};
+						$.each(data.followers, function(){
+							followers[this] = 1;
+						});
+
+						var loves = [];
+						$.each(friends, function(key, value){
+							if(!(followers[key])){
+								loves.push(key);
+							}
+						});
+						var lovers = [];
+						$.each(followers, function(key, value){
+							if(!(friends[key])){
+								lovers.push(key);
+							}
+						});
+
+						var html = build_head(loves.length, lovers.length);
+						$('#result').html(html);
+
+						proc_users(loves, lovers);
+					},
+					'json'
+				);
+			}
+
+			function build_head(loves_count, lovers_count){
+				return [
+					'<h2><img alt="" class="icon" src="loves.gif" width="57" height="32" />片想い (', loves_count.toString(), ')</h2>',
+					'<div id="loves_table"></div>',
+					'<h2><img alt="" class="icon" src="lovers.gif" width="57" height="32" />片想われ (', lovers_count.toString(), ')</h2>',
+					'<div id="lovers_table"></div>'
+				].join('');
+			}
+
+			function proc_users(loves, lovers){
+				var users = loves.concat(lovers);
+				(function(users, index, length, usermap, callback){
+					var targets = users.slice(index, index + length);
+					if(targets.length == 0){
+						callback(usermap);
+						return;
+					}
+					$('#message').text('ユーザー情報取得中 (' + (index + targets.length).toString() + ' / ' + users.length.toString() + ')');
+					$.post(
+						'users.cgi',
+						{ ids: targets.join(',') },
+						(function(func){
+							return function(data, status){
+								$.each(data, function(){
+									usermap[this.id] = this;
+								});
+								func(users, index + length, length, usermap, callback);
+							};
+						})(arguments.callee),
+						'json'
+					);
+				})(users, 0, 100, {}, function(usermap){
+					proc_table(loves, lovers, usermap);
+				});
+			}
+
+			function load_users(users, callback){
+				load_users_core(users, 0, 100, {}, callback);
+			}
+
+			function load_users_core(users, index, length, usermap, callback){
+				var targets = users.slice(index, index + length);
+				if(targets.length == 0){
+					callback(usermap);
+					return;
+				}
+				$('#message').text('ユーザー情報取得中 (' + (index + targets.length).toString() + ' / ' + users.length.toString() + ')');
+				$.post(
+					'users.cgi',
+					{ ids: targets.join(',') },
+					function(data, status){
+						$.each(data, function(){
+							usermap[this.id] = this;
+						});
+						load_users_core(users, index + length, length, usermap, callback);
+					},
+					'json'
+				);
+			}
+
+			function proc_table(love_ids, lover_ids, usermap){
+				$('#message').text('画面構築中');
+				var loves = [];
+				$.each(love_ids, function(){
+					loves.push(usermap[this]);
+				});
+				var lovers = [];
+				$.each(lover_ids, function(){
+					lovers.push(usermap[this]);
+				});
+
+				var sorter = function(a, b){
+					var a_time = a.status ? Date.parse(a.status.created_at) : 0;
+					var b_time = b.status ? Date.parse(b.status.created_at) : 0;
+					return b_time - a_time;
+				};
+				loves.sort(sorter);
+				lovers.sort(sorter);
+
+				var loves_html = build_table(loves, '片想い', 'loves.gif');
+				var lovers_html = build_table(lovers, '片想われ', 'lovers.gif');
+
+				$('#loves_table').html(loves_html);
+				$('#lovers_table').html(lovers_html);
+
+				$('.followlink').click(function(){
+					var $parent = $(this.parentNode);
+					$.get(this.href, function(){
+						$parent.html('<span class="state">完了</span>');
+					});
+					$parent.html('<span class="state">処理中...</span>');
+					return false;
+				});
+				
+				$('.timelinelink').click(function(){
+					var $parent = $(this.parentNode);
+					$.get(this.href, null, function(data){
+						$parent.html(build_timeline(data));
+					}, 'json');
+					$parent.html('<span class="state">読み込み中...</span>');
+					return false;
+				});
+				$('#loading').remove();
+			}
+
+			function build_table(users, title, icon){
+				var html = '';
+				html += '<table><tbody>';
+				html += [
+					'<tr>',
+					'<th colspan="2">ユーザー</th>',
+					'<th>ツイート</th>',
+					'<th>フォロー</th>',
+					'<th>フォロワー</th>',
+					'<th>プロフィール</th>',
+					'<th>ツイート</th>',
+					'<th>フォロー操作</th>',
+					'</tr>'
+				].join('');
+
+				$.each(users, function(index){
+					if(!this.id) return true;
+					html += [
+						'<tr class="' + ((index % 2 == 0) ? 'even' : 'odd') + '">',
+						'<td class="profile_image">',
+						'<img alt="" class="profile_image" src="' + this.profile_image_url + '" width="50" height="50" /><br />',
+						(this.protected ? '<img alt="protected" class="protected" src="protected.gif" width="12" height="12" />' : ''),
+						(this.verified ? '<img alt="verified" class="verified" src="verified.gif" width="12" height="12" />' : ''),
+						'</td>',
+						'<td class="name">',
+						'<span class="screen_name"><a href="http://twitter.com/' + this.screen_name + '">' + this.screen_name + '</a></span>',
+						this.name,
+						(this.location ? '<span class="location">' + this.location + '</span>' : ''),
+						'</td>',
+						'<td class="tweets_count">',
+						(this.statuses_count ? this.statuses_count.toString() : '0'),
+						'</td>',
+						'<td class="friends_count">',
+						(this.friends_count ? this.friends_count.toString() : '0'),
+						'</td>',
+						'<td class="followers_count">',
+						(this.followers_count ? this.followers_count.toString() : '0'),
+						'</td>',
+						'<td class="profile">',
+						this.description,
+						(this.url ? '<span class="url">Web <a href="' + this.url + '">' + omit(this.url, 40) + '</a></span>' : ''),
+						'<span class="date">Joined at ' + format_date(this.created_at) + ' #' + format_comma(this.id) + '</span>',
+						'</td>',
+						'<td class="tweet">',
+						(this.status ? this.status.text : '<br />'),
+						(this.status ? '<span class="date"><a href="http://twitter.com/' + this.screen_name + '/status/' + this.status.id + '">' + format_date(this.status.created_at) + '</a></span>' : ''),
+						(this.status ? '<a class="timelinelink" href="user_timeline.cgi?id=' + this.id + '">もっと読む</a>' : ''),
+						'</td>',
+						'<td class="link">',
+						(this.following ? '<a class="followlink" href="unfollow.cgi?id=' + this.id + '">解除する</a>' : '<a class="followlink" href="follow.cgi?id=' + this.id + '">フォローする</a>'),
+						'</d>',
+						'</tr>'
+					].join('');
+				});
+				html += '</tbody></table>';
+				return html;
+			}
+			function build_timeline(data){
+				var html = '';
+				html += '<div class="list">';
+				$.each(data, function(index){
+					html += [
+						this.text,
+						'<span class="date"><a href="http://twitter.com/' + this.user.screen_name + '/status/' + this.id + '">' + format_date(this.created_at) + '</a></span><br />'
+					].join('');
+				});
+				html += '</div>';
+				return html;
+			}
+			function format_date(date){
+				var d = new Date(date);
+				return d.toLocaleString();
+			}
+			function format_comma(number){
+				if(!number) return '';
+				var text = number.toString();
+				while(text != (text = text.replace(/^(-?\d+)(\d{3})/, "$1,$2")));
+				return text;
+			}
+			function omit(text, length){
+				if(text.length < length){
+					return text;
+				}else{
+					return text.substr(0, length - 3) + '...';
+				}
+			}
+		</script>
+		<title>lovetestter(らぶてすったー) - Twitterの片想い片想われをチェックします</title>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-3024935-4']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+	</head>
+	<body>
+		<div id="header">
+			<h1><img alt="lovetestter" src="logo.gif" width="187" height="34" /></h1>
+			<p>Twitterの片想い片想われをチェックします</p>
+			<p>
+				<a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lovetestter.nacookan.com/" data-text="lovetestter(らぶてすったー) - Twitterの片想い片想われをチェックします" data-count="none" data-lang="ja">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			</p>
+		</div>
+		<div id="stage">
+			<p id="loading">
+				<img alt="" src="loading.gif" width="32" height="32" /><br />
+				お待ちください...<br />
+				<span id="message"></span>
+			</p>
+			<div id="result"></div>
+		</div>
+		<div id="amazon">
+<SCRIPT charset="utf-8" type="text/javascript" src="http://ws.amazon.co.jp/widgets/q?ServiceVersion=20070822&MarketPlace=JP&ID=V20070822/JP/muumoojp-22/8001/2ff30d78-9eb1-4c38-858f-68cf1f622936"> </SCRIPT> <NOSCRIPT><A HREF="http://ws.amazon.co.jp/widgets/q?ServiceVersion=20070822&MarketPlace=JP&ID=V20070822%2FJP%2Fmuumoojp-22%2F8001%2F2ff30d78-9eb1-4c38-858f-68cf1f622936&Operation=NoScript">Amazon.co.jp ウィジェット</A></NOSCRIPT>
+		</div>
+		<address>
+			&copy; 2010 <a href="http://twitter.com/nacookan">@nacookan</a>
+		</address>
+	</body>
+</html>

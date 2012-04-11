@@ -1,0 +1,3 @@
+<Files ~ "\.rb$">
+  deny from all
+</Files>
