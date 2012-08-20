@@ -297,7 +297,7 @@
 			function proc_profile(){
 				$('#message').text('プロフィール読み込み中');
 				$.get(
-					'profile.cgi',
+					'profile.cgi?' + (new Date()).getTime().toString(),
 					null,
 					function(data, status){
 						if(data.logged_in){
