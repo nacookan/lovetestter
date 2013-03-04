@@ -12,7 +12,7 @@ session = CGI::Session.new(cgi, { 'new_session' => true, 'tmpdir' => SESSION_DIR
 consumer = OAuth::Consumer.new(
   CONSUMER_KEY,
   CONSUMER_SECRET,
-  :site => 'http://twitter.com'
+  :site => 'http://api.twitter.com'
 )
 option = { :oauth_callback => OAUTH_CALLBACK_URL }
 request_token = consumer.get_request_token(option, {})

@@ -15,7 +15,7 @@ oauth_verifier = cgi['oauth_verifier']
 consumer = OAuth::Consumer.new(
   CONSUMER_KEY,
   CONSUMER_SECRET,
-  :site => 'http://twitter.com'
+  :site => 'http://api.twitter.com'
 )
 request_token = OAuth::RequestToken.new(
   consumer,
