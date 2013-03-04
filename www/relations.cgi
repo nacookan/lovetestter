@@ -22,8 +22,8 @@ client = Twitter::Client.new
 id = cgi['id']
 
 result = {
-  :followers => client.follower_ids(:id => id)['ids'],
-  :friends => client.friend_ids(:id => id)['ids']
+  :followers => client.follower_ids(:id => id).attrs[:ids],
+  :friends => client.friend_ids(:id => id).attrs[:ids]
 }
 
 cgi.out('text/javascript'){

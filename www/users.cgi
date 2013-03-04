@@ -22,6 +22,6 @@ client = Twitter::Client.new
 ids = cgi['ids'].split(/,/).map {|item| item.to_i}
 
 cgi.out('text/javascript'){
-  client.users(*ids).to_json
+  client.users(*ids).map{|u| u.attrs}.to_json
 }
 

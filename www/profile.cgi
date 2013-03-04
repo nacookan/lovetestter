@@ -30,7 +30,7 @@ else
   cgi.out('text/javascript'){
     {
      :logged_in => true,
-     :profile => client.verify_credentials
+     :profile => client.verify_credentials.attrs
     }.to_json
   }
 end
